@@ -84,8 +84,11 @@ analyze_clicked = st.button("Analyze", type="primary")
 if analyze_clicked:
     if uploaded_cv is None:
         st.warning("Please upload your CV as a PDF first.")
-    elif not job_description.strip():
-        st.warning("Please paste a job description first.")
+    elif len(job_description.split()) < 10:
+        st.warning(
+            "Please paste a fuller job description (at least a couple of "
+            "sentences) so the skills can be detected."
+        )
     else:
         try:
             with st.spinner("Analyzing your CV..."):
