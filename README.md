@@ -53,4 +53,46 @@ CV Match is a guide, not a verdict. A "missing skill" is a prompt to reflect on 
 
 ## Project status
 
-In development. Installation, run instructions and screenshots will be added once the app is complete.
+## Screenshots
+
+| Home | Result |
+|---|---|
+| ![Home page](docs/screenshots/home.png) | ![Result page](docs/screenshots/result.png) |
+
+## Installation
+
+Requires Python 3.9 or newer.
+
+```bash
+git clone https://github.com/baqar360/cv-match.git
+cd cv-match
+python -m venv .venv
+# Windows (PowerShell):
+.venv\Scripts\Activate.ps1
+# macOS / Linux:
+# source .venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+## Run
+
+```bash
+python -m streamlit run app.py
+```
+
+Open http://localhost:8501, upload a text-based PDF CV, paste a job description (at least 10 words) and click **Analyze**.
+
+## Limitations
+
+- Skills are detected from a fixed list in `skills.py`, so job descriptions with no listed skills return a "no recognizable skills" message instead of a score.
+- The CV is read as text. Scanned or image-only PDFs may not work because there is no OCR.
+- The score is a simple skill-overlap estimate, not a hiring decision.
+
+## Troubleshooting
+
+- `ModuleNotFoundError: No module named 'fitz'`: run `python -m pip install pymupdf`.
+- `DLL load failed ... Application Control policy has blocked this file` (seen on one Windows laptop with PyMuPDF 2.2): install an older version with `python -m pip install pymupdf==1.24.14`.
+
+## Project status
+
+Frontend and backend are connected and tested locally. Deployment: not yet done.
