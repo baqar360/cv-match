@@ -23,33 +23,43 @@ def score_color(score: int) -> str:
 
 def show_results(result: dict) -> None:
     """Render the dictionary returned by analyze_cv."""
-    score = max(0, min(100, int(result["score"])))
+    matched = result["matched_skills"]
+    missing = result["missing_skills"]
 
-    st.subheader("Match score")
-    st.markdown(f"## :{score_color(score)}[{score} / 100]")
-    st.progress(score)
+    if not matched and not missing:
+        st.warning(
+            "No recognizable skills were found in this job description, so a "
+            "match score can't be calculated. Paste a job posting that names "
+            "specific skills or tools (for example Python, SQL or Docker)."
+        )
+    else:
+        score = max(0, min(100, int(result["score"])))
 
-    col_matched, col_missing = st.columns(2)
+        st.subheader("Match score")
+        st.markdown(f"## :{score_color(score)}[{score} / 100]")
+        st.progress(score)
 
-    with col_matched:
-        st.subheader("✅ Matched skills")
-        if result["matched_skills"]:
-            for skill in result["matched_skills"]:
-                st.markdown(f"- :green[{skill}]")
-        else:
-            st.info("No skills from the job description were found in your CV.")
+        col_matched, col_missing = st.columns(2)
 
-    with col_missing:
-        st.subheader("⚠️ Missing skills")
-        if result["missing_skills"]:
-            for skill in result["missing_skills"]:
-                st.markdown(f"- :red[{skill}]")
-            st.caption(
-                "Only add a skill to your CV if you genuinely have it. "
-                "Otherwise, treat it as something to learn."
-            )
-        else:
-            st.success("Your CV covers every skill found in the job description.")
+        with col_matched:
+            st.subheader("✅ Matched skills")
+            if matched:
+                for skill in matched:
+                    st.markdown(f"- :green[{skill}]")
+            else:
+                st.info("None of the skills in the job description were found in your CV.")
+
+        with col_missing:
+            st.subheader("⚠️ Missing skills")
+            if missing:
+                for skill in missing:
+                    st.markdown(f"- :red[{skill}]")
+                st.caption(
+                    "Only add a skill to your CV if you genuinely have it. "
+                    "Otherwise, treat it as something to learn."
+                )
+            else:
+                st.success("Your CV covers every skill found in the job description.")
 
     st.subheader("💡 CV improvement suggestions")
     if result["suggestions"]:
